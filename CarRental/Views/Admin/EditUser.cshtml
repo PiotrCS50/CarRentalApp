@@ -1,0 +1,23 @@
+﻿@model CarRental.Models.RegisterViewModel
+
+@{
+    ViewBag.Title = "EditUser";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container col-8">
+    <div class="lead mt-3 mb-3">
+        <h3>Nowe konto</h3>
+    </div>
+    <div>
+        @using (Html.BeginForm("EditUser", "Admin", FormMethod.Post, new { id = "editForm" }))
+        {
+            @Html.HiddenFor(x => x.UserName)
+            @Html.Partial("AccountDetails", Model)
+        }
+    </div>
+    <div class="btn-group mt-2">
+        <button class="btn btn-success" type="submit" form="editForm">Zapisz zmiany</button>
+    </div>
+</div>
+

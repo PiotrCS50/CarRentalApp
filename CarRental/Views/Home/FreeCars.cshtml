@@ -1,0 +1,99 @@
+﻿@using CarRental.Domain.Extentions
+@model CarRental.Domain.Models.CarListModel
+
+@{
+    ViewBag.Title = "FreeCars";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="~/Files/"></script>
+<style>
+    .card:hover {
+        transform: scale(1.01);
+        border: 2px solid blue;
+    }
+</style>
+<div class="container d-inline-flex justify-content-center">
+    <div class="mt-4 col-2 text-center">
+
+
+        @using (Html.BeginForm("FilterCars", "Home"))
+        {
+            <p><label class="lead text-center fw-bold">Sortuj po</label></p>
+            @Html.EditorFor(x => x.Filter.SortOprion)
+            <p><label class="lead text-center fw-bold">Filtry</label></p>
+            <p><label class="fw-bold">Marki:</label></p>
+            int i = 0;
+            foreach (var brand in Model.Filter.CarBrands)
+            {
+                <div class="form-check col-8">
+                    <label class="form-check-label">@brand.Name</label>
+                    @Html.Hidden("Filter.CarBrands[" + i + "].Name", brand.Name)
+                    @Html.CheckBox("Filter.CarBrands[" + i + "].CheckBoxValue", brand.CheckBoxValue, new { @class = "form-check-input" })
+                </div>
+                i++;
+            }
+            i = 0;
+            <p><label class="fw-bold">Typy:</label></p>
+            foreach (var type in Model.Filter.CarTypes)
+            {
+                <div class="form-check col-8">
+                    <label class="form-check-label">@type.Name</label>
+                    @Html.Hidden("Filter.CarTypes[" + i + "].Name", type.Name)
+                    @Html.CheckBox("Filter.CarTypes[" + i + "].CheckBoxValue", type.CheckBoxValue, new { @class = "form-check-input" })
+                </div>
+                i++;
+            }
+            <div class="col-10 mt-5" style="padding-left:3em">
+                <label for="upload-min-range" class="form-label">
+                    Cena od: <input type="number" id="upload-min-value" class="form-text" min="1" max="9999" value="@Model.Filter.MinPrice"
+                                    onchange="$('#upload-min-range').val($(this).val()); $('#upload-max-range').attr('min',$(this).val()); $('#upload-max-value').attr('min',$(this).val());" /> zł
+                </label>
+                <input id="upload-min-range" type="range" class="form-range" min="1" max="9999" name="Filter.MinPrice" value="@Model.Filter.MinPrice"
+                       onchange="$('#upload-min-value').val($(this).val()); $('#upload-max-range').attr('min',$(this).val()); $('#upload-max-value').attr('min',$(this).val());">
+                <label for="upload-max-range" class="form-label">
+                    Cena do: <input type="number" id="upload-max-value" class="form-text" min="2" max="10000" value="@Model.Filter.MaxPrice"
+                                    onchange="$('#upload-max-range').val($(this).val()); $('#upload-min-range').attr('max',$(this).val()); $('#upload-min-value').attr('max',$(this).val());" /> zł
+                </label>
+                <input type="range" class="form-range" id="upload-max-range" value="@Model.Filter.MaxPrice" min="1" max="10000" name="Filter.MaxPrice"
+                       onchange="$('#upload-max-value').val($(this).val()); $('#upload-min-range').attr('max',$(this).val()); $('#upload-min-value').attr('max',$(this).val());">
+            </div>
+            <button type="submit" class="btn btn-success">Zapisz</button>
+        }
+
+    </div>
+    <div class="col-8">
+        <div class="container d-flex justify-content-center">
+            <h2>Samochody do wypożyczenia:</h2>
+        </div>
+        <div class="container d-flex justify-content-center text-center row">
+            @foreach (var car in Model.Cars)
+            {
+                <div class="card mt-2 " onclick="location.href='@Url.Action("CarDetails",new { carModel = car.Car.Model, carBrand = car.Car.Brand })'">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                             @if (car.Car.ImageData != null)
+                             {
+                                <img src ="@Url.Action("GetImage", new { car.Car.Id })" class="img-fluid rounded-start" alt="..." >
+                             }
+                             else { 
+                                <img src="~/Assets/images.jpg" class="img-fluid rounded-start" alt="...">   
+                             }
+
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title"> @car.Car.Brand @car.Car.Model</h5>
+                                <p class="card-text"><small class="text-muted">Cena: @car.Price.ToString("c")/dzień  Kaucja: @car.Caution</small></p>
+                                <p class="card-text">Razem: @((((int)Session["Days"])*car.Price).ToString("c"))</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="mt-2" style="padding-top:2em; padding-bottom:5em;">
+                @Html.PageLinks(Model.Paging, x => Url.Action("FreeCars", new { page = x }))
+            </div>
+        </div>
+    </div>
+</div>

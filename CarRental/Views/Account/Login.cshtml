@@ -1,0 +1,50 @@
+﻿@using CarRental.Models
+@model LoginViewModel
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container mt-5 justify-content-center col-8">
+    <div class="text-center">
+        <h2>Logowanie</h2>
+    </div>
+    <div class="container justify-content-center col-6 mt-5">
+
+        <div class="rounded justify-content-center text-center" style="background-color: dodgerblue; color:white; font-weight: bold; padding: 10px 10px 10px 10px">
+            @using (Html.BeginForm("Login", "Account", FormMethod.Post, new { id = "loginForm" }))
+            {
+                <div>
+                    @Html.LabelFor(x => x.Username, new { @class = "form-label" })
+                </div>
+                <div style="margin-right: 10px; margin-left:10px;">
+                    @Html.TextBoxFor(x => x.Username, new { @class = "form-control" })
+                </div>
+                <div>
+                    @Html.LabelFor(x => x.Password, new { @class = "form-label" })
+                </div>
+                <div style="margin-right: 10px; margin-left:10px;">
+                    @Html.TextBoxFor(x => x.Password, new { @class = "form-control", type = "password" })
+                </div>
+                @Html.Hidden("returnUrl", (string)ViewBag.returnUrl)
+            }
+            <div class="mt-2">
+                <label class="text-danger">
+                    @Html.ValidationSummary()
+                </label>
+            </div>
+            <div class="dropdown-divider"></div>
+            <div class="btn-group mt-2">
+                <div class="col" style="margin-right: 10px">
+                    <button class="btn btn-success" type="submit" form="loginForm">Zaloguj</button>
+                </div>
+                @if (ViewBag.returnUrl == null || !((string)ViewBag.returnUrl).Contains("Admin"))
+                {
+                <div class="col">
+                    <button onclick="location.href='@Url.Action("Register", "Account", new { returnUrl = (string)ViewBag.returnUrl })'" class="btn btn-success">Zarejestruj</button>
+                </div>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>

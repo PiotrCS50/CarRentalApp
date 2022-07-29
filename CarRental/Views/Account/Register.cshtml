@@ -1,0 +1,29 @@
+﻿@model CarRental.Models.RegisterViewModel
+
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container col-8">
+    <div class="lead mt-3 mb-3">
+        <h3>Nowe konto</h3>
+    </div>
+    <div class="mt-2">
+        @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { id = "registerForm" }))
+        {
+            @Html.LabelFor(x => x.UserName, new { @class = "form-label" })
+            @Html.TextBoxFor(x => x.UserName, new { @class = "form-control" })
+            <p><small style="font-weight:bold; color:red;">@Html.ValidationMessageFor(x => x.UserName)</small></p>
+            <p><small style="font-weight:bold; color:red;">@Html.ValidationMessage("UserNameUsed")</small></p>
+            @Html.Partial("AccountDetails", Model)
+            @Html.LabelFor(x => x.Password, new { @class = "form-label" })
+            @Html.TextBoxFor(x => x.Password, new { @class = "form-control", type = "password" })
+            <p><small style="font-weight:bold; color:red;">@Html.ValidationMessageFor(x => x.Password)</small></p>
+        }
+    </div>
+    <div class="btn-group mt-2">
+        <button class="btn btn-success" type="submit" form="registerForm">Zarejestruj</button>
+    </div>
+</div>
+
+

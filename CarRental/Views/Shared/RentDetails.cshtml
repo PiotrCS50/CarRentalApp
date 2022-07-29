@@ -1,0 +1,101 @@
+﻿@using CarRental.Domain.Extentions
+@model CarRental.DTOs.LoanDto
+@{ 
+    bool rented = Model.Rented;
+    AjaxOptions ajaxOpts = new AjaxOptions
+    {
+
+        Url = Url.Action("CancelRent", "Home"),
+        Confirm = "Czy napewno chcesz anulować wynajem?",
+        OnSuccess = "success"
+    };
+    AjaxOptions ajaxOptsAccept = new AjaxOptions
+    {
+
+        Url = Model.Rented ? Url.Action("ReturnCar","Admin") : Url.Action("AcceptRent", "Admin"),
+        Confirm = "Czy napewno potwierdzić wynajem?",
+        OnSuccess = "success"
+    };
+}
+<script type="text/javascript">
+    function success(response) {
+        window.location.href = response.redirectToUrl;
+    }
+</script>
+<div class=" justify-content-center">
+    <div class="@(Model.Rented ? "card border border-3 border-success rounded" : "card")">
+        <div class="row g-0">
+            <div class="col-md-4">
+                @if (Model.Car.ImageData != null)
+                {
+                    <img src="@Url.Action("GetImage", "Home", new { Model.Car.Id})" class="img-fluid rounded-start" alt="...">
+                }
+                else { 
+                    <img src="~/Assets/images.jpg" class="img-fluid rounded-start" alt="...">
+                }
+
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title"> @Model.Car.Brand @Model.Car.Model @Model.LicensePlate</h5>
+                    <p class="card-text lead">Wynajem</p>
+                    <p style="padding-left:2em">
+                        Ilość dni: @Model.LoanDays <br/>
+                        od: <label class="fw-bold">@Model.LoanDate.ToString("dddd, dd MMMM yyyy")</label><br />
+                        do: <label class="fw-bold">@Model.ReturnDate.ToString("dddd, dd MMMM yyyy")</label>
+                    </p>
+                    @if (ViewBag.Admin != null && ViewBag.Admin)
+                    {
+                        <p>Użytkownik:</p>
+                            <p style="padding-left:2em">Imię: <label class="fw-bold">@Model.LoanUser.Name</label>  Nazwisko: <label class="fw-bold">@Model.LoanUser.Surname</label><br/>
+                            Login: <label class="fw-bold">@Model.LoanUser.UserName</label> </p>
+                    }
+                    <p class="card-text"><small class="text-muted">Cena: @Model.Price.ToString("c")/dzień  Kaucja: @Model.Caution</small></p>
+                    <p class="card-text">Razem: <label class="fw-bold">@Model.TotalPrice.ToString("c")</label></p>
+                    @if (ViewBag.NotRented == null)
+                    {
+                        @:<p class="card-text"><small class="text-muted">@(Model.Returned ? "Zwrócony" : Model.Rented ? "Wynajęty" : "Zarezerwowany")</small></p>
+                        @:<p class="card-text btn-group list-inline">
+                            if (!Model.Returned)
+                            {
+                                if (Model.Rented)
+                                {
+
+
+                                    if (ViewBag.Admin != null && (bool)ViewBag.Admin)
+                                    {
+                                        using (Ajax.BeginForm(ajaxOptsAccept))
+                                        {
+                                            @Html.Hidden("id", Model.LoanId)
+                                            <button type="submit" class="btn btn-danger" style="width:40%">Potwierdź zwrot</button>
+
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    if (ViewBag.Admin != null && (bool)ViewBag.Admin && Model.LoanDate.Rented())
+                                    {
+                                        using (Ajax.BeginForm(ajaxOptsAccept))
+                                        {
+                                            @Html.Hidden("loanId", Model.LoanId)
+                                            <button type="submit" class="btn btn-success" style="width:40%">Potwierdz wynajem</button>
+                                        }
+                                    }
+                                    using (Ajax.BeginForm(ajaxOpts))
+                                    {
+                                        @Html.Hidden("id", Model.LoanId)
+                                        <button type="submit" class="btn btn-danger" style="width:40%">Anuluj</button>
+                                    }
+                                }
+                            }
+                        }
+
+
+                        </p>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+

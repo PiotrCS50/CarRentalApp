@@ -1,0 +1,20 @@
+﻿@model CarRental.Domain.Entities.RentalRecord
+
+@{
+    ViewBag.Title = "AddCar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container col-8 mt-4">
+    <h2>Dodawanie samochodu</h2>
+    <div class="mt-4">
+        @using (Html.BeginForm("AddCar","Admin", FormMethod.Post, new { id = "addCarForm", enctype = "multipart/form-data" }))
+        {
+                @Html.Partial("CarDetails",Model)
+            }
+        <div class="btn-group mt-4">
+            <button type="submit" form="addCarForm" class="btn btn-success">Dodaj</button>
+            <button class="btn btn-danger" onclick="location.href='@Url.Action("Cars", "Admin")'">Wróć</button>
+        </div>
+    </div>
+</div>
+

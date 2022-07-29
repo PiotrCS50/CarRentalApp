@@ -1,0 +1,38 @@
+﻿@model CarRental.DTOs.LoanDto
+@{
+    ViewBag.Title = "ConfirmRezervation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container justify-content-center">
+    <div class="text-center">
+        <h3>Potwierdź rezerwację</h3>
+    </div>
+    <div class="text-center mt-5">
+        @Html.Partial("RentDetails", Model)
+        <div class="mt-2 btn-group">
+            @using (Html.BeginForm("RentCar", "Home"))
+            {
+                @Html.HiddenFor(x => x.Car.Id)
+                @Html.HiddenFor(x => x.Car.Brand)
+                @Html.HiddenFor(x => x.Car.Model)
+                @Html.HiddenFor(x => x.Car.Capacity)
+                @Html.HiddenFor(x => x.Car.Type)
+                @Html.HiddenFor(x => x.Car.ImageData)
+                @Html.HiddenFor(x => x.Car.ImageMimeType)
+                @Html.HiddenFor(x => x.LicensePlate)
+                @Html.HiddenFor(x => x.LoanId)
+                @Html.HiddenFor(x => x.Price)
+                @Html.HiddenFor(x => x.Caution)
+                @Html.HiddenFor(x => x.LoanUser.Id)
+                @Html.HiddenFor(x => x.LoanDate)
+                @Html.HiddenFor(x => x.ReturnDate)
+                @Html.HiddenFor(x => x.CarReturnedDate)
+                @Html.HiddenFor(x => x.Returned)
+                @Html.HiddenFor(x => x.Rented)
+                <button type="submit" class="btn btn-success" style="margin-right: 4px">Zatwierdź</button>
+
+            }
+            <button onclick="location.href='@Url.Action("CarDetails", "Home", new { carModel = Model.Car.Model, carBrand = Model.Car.Brand})'" class="btn btn-success">Anuluj</button>
+        </div>
+    </div>
+</div>

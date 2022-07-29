@@ -1,0 +1,11 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container col-8 mt-4">
+    <button class="btn btn-lg btn-outline-primary col-12" style="padding-top: 15px; padding-bottom: 15px;" onclick="location.href='@Url.Action("Users")'">Zarządzaj uzytkownikami</button>
+    <button class="btn btn-lg btn-outline-primary col-12 mt-3" style="padding-top: 15px; padding-bottom: 15px;" onclick="location.href='@Url.Action("Cars")'">Zarządzaj samochodami</button>
+    <button class="btn btn-lg btn-outline-primary col-12 mt-3" style="padding-top: 15px; padding-bottom: 15px;" onclick="location.href='@Url.Action("GetAllLoans")'">Zarządzaj wynajmami</button>
+</div>

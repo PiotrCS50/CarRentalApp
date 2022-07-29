@@ -1,0 +1,70 @@
+﻿@using CarRental.Domain.Entities
+@model IEnumerable<RentalRecord>
+@{
+    ViewBag.Title = "Cars";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 1;
+    AjaxOptions ajaxOpts = new AjaxOptions
+    {
+        Url = Url.Action("RemoveCar", "Admin"),
+        Confirm = "Spowoduje to usunięcie wszystkich samochodów tego typu z wypożyczalni.\nCzy chcesz konntynuować?",
+        OnSuccess = "success"
+    };
+}
+<script type="text/javascript">
+    function success(response) {
+        window.location.href = response.redirectToUrl;
+    }
+</script>
+<div class="container col-8 mt-2 mb-5">
+    <button onclick="location.href='@Url.Action("AddCar","Admin")'" class="btn btn-success mt-4 mb-4">Dodaj samochód</button>
+    <h3>Samochody w wypożyczalni</h3>
+    <div class="mt-4">
+        <table class="table">
+            <thead class="table-dark">
+                <tr>
+                    <th>Lp.</th>
+                    <th>@Html.DisplayNameFor(m => m.Car.Brand)</th>
+                    <th>@Html.DisplayNameFor(m => m.Car.Model)</th>
+                    <th>@Html.DisplayNameFor(m => m.Car.Capacity)</th>
+                    <th>@Html.DisplayNameFor(m => m.Price)</th>
+                    <th>Ilość</th>
+                    <th>Akcje</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td>@(i++)</td>
+                    <td>@item.Car.Brand</td>
+                    <td>@item.Car.Model</td>
+                    <td>@item.Car.Capacity</td>
+                    <td>@item.Price.ToString("c")</td>
+                    <td>@(item.Car.LicensePlates == null ? 0 : item.Car.LicensePlates.Count())</td>
+                    <td class="btn-group">
+                        <button class="btn btn-outline-success"
+                                onclick="location.href='@Url.Action("AddLicense", new { item.Car.Id })'">
+                            <i class="bi bi-plus-square"></i>
+                        </button>
+
+                        <button class="btn btn-outline-secondary"
+                                onclick="location.href='@Url.Action("Edit", new { item.Id })'">
+                            <i class="bi bi-pencil-square"></i>
+                        </button>
+                        @*@Html.ActionLink("Dodaj", "AddLicense", new { item.Car.Id }, new { @class = "btn btn-success" })*@
+                        @using (Ajax.BeginForm(ajaxOpts))
+                        {
+                            @Html.Hidden("id", item.Id)
+                            <button type="submit" class="btn btn-outline-danger"><i class="bi bi-x-square"></i></button>
+                            @*<input type="submit" class="btn btn-danger" value="Usuń" />*@
+                        }
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
+

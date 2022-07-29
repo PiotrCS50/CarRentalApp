@@ -1,0 +1,48 @@
+﻿@using CarRental.Models
+@model RentTimeModelView
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container d-flex justify-content-center">
+    <div class="col-8">
+        <div class="text-center mt-4 mb-4">
+            <h3 style="color:midnightblue; font-weight:bold">Wypożyczalnia samochodów <font style="color:cornflowerblue">WildCars</font></h3>
+        </div>
+        @using (Html.BeginForm("SaveDates", "Home"))
+        {
+    <div class="container rounded-3" style="background-color:dodgerblue; padding: 30px 30px 30px 30px">
+        <div class="row">
+            <div class="col mt-4 mb-4">
+                @Html.LabelFor(x => x.LoanDate, new { @class = "form-label", @style = "color:white; font-weight:bold" })
+                @Html.TextBoxFor(x => x.LoanDate, new
+                {
+                    @type = "date",
+                    @Value = Model.LoanDate.ToString("yyyy-MM-dd"),
+                    @class = "form-control",
+                    min = DateTime.Today.ToString("yyyy-MM-dd"),
+                })
+            </div>
+            <div class="col mt-4 mb-4">
+                @Html.LabelFor(x => x.ReturnDate, new { @class = "form-label", @style = "color:white; font-weight:bold" })
+                @Html.TextBoxFor(x => x.ReturnDate, new
+                {
+                    @type = "date",
+                    @Value = Model.ReturnDate.ToString("yyyy-MM-dd"),
+                    @class = "form-control",
+                    min = DateTime.Today.ToString("yyyy-MM-dd")
+                })
+            </div>
+            <div class="col mt-4 mb-4 d-flex mt-auto">
+                <button class="btn btn-success mt-4" type="submit">Wyszukaj samochody</button>
+            </div>
+        </div>
+        <div class="mt-2 text-center fw-bold" style="color:red;">
+            @Html.ValidationSummary()
+        </div>
+    </div>
+
+        }
+    </div>
+</div>

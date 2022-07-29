@@ -1,0 +1,33 @@
+﻿@model CarRental.Models.RegisterViewModel
+
+@*@using (Html.BeginForm("Register","Account", FormMethod.Post, new { id = "registerForm"}))
+    {*@
+@foreach (var property in ViewData.ModelMetadata.Properties)
+{
+    if (property.PropertyName != "Admin" && property.PropertyName != "UserName" && property.PropertyName != "Password")
+    {
+        if (property.PropertyName == "AccountType")
+        {
+            if (Model.Admin)
+            {
+                @Html.Label(property.PropertyName, new { @class = "form-label" })
+                <div>
+                    @Html.Editor(property.PropertyName)
+                    <p><small style="font-weight:bold; color:red;">@Html.ValidationMessageFor(x => x.AccountType)</small></p>
+                </div>
+            }
+            else{
+                @Html.HiddenFor(x => x.AccountType)
+            }
+        }
+        else
+        {
+            @Html.Label(property.PropertyName, new { @class = "form-label" })
+            <div>
+                @Html.TextBox(property.PropertyName, null, new { @class = "form-control" })
+                <p><small style="font-weight:bold; color:red;">@Html.ValidationMessage(property.PropertyName)</small></p>
+            </div>
+        }
+    }
+}
+@*}*@

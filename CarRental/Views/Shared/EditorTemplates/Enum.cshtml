@@ -1,0 +1,12 @@
+﻿@model Enum
+
+@Html.DropDownListFor(m => m, Enum.GetValues(Model.GetType()).Cast<Enum>().Select(m =>
+{
+    string enumValue = Enum.GetName(Model.GetType(), m);
+    return new SelectListItem()
+    {
+        Selected = (Model.ToString() == enumValue),
+        Text = enumValue == "popularity" ? "Popularność" : enumValue == "priceUp" ? "Cena rosnąco" : enumValue == "priceDown" ? "Cena malejąco" : enumValue,
+        Value = enumValue
+    };
+}), new { @class = "form-control" })

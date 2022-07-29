@@ -1,0 +1,15 @@
+﻿@model CarRental.DTOs.LoanDto
+
+@{
+    ViewBag.Title = "Rented";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container col-8 mt-4">
+    <div class="text-center">
+        <h2>Samochód został zarezerwowany</h2>
+        <label class="text-muted">Płatność przy wynajmie samochodu w biurze</label>
+        <hr />
+        <h3 class="mb-3">Szczegóły rezerwacji</h3>
+    </div>
+    @Html.Partial("RentDetails", Model)
+</div>

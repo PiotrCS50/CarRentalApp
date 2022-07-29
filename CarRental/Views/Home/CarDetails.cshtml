@@ -1,0 +1,81 @@
+﻿@using CarRental.Models
+@using CarRental.Domain.Entities
+@model CarRental.Domain.Entities.RentalRecord
+
+@{
+    ViewBag.Title = "CarDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container col-8 mt-4">
+    <div class=" justify-content-center">
+        <div class="card">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    @if (Model.Car.ImageData != null)
+                    {
+                        <img src="@Url.Action("GetImage", new { Model.Car.Id})" class="img-fluid rounded-start" alt="...">
+                    }
+                    else
+                    {
+                        <img src="~/Assets/images.jpg" class="img-fluid rounded-start" alt="...">
+                    }
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title"> @Model.Car.Brand @Model.Car.Model</h5>
+                        <p class="card-text">@Model.Description</p>
+                        <p class="card-text"><small class="text-muted">@Model.Price zł / dzień</small></p>
+                        <p class="card-text"><small class="text-muted">Kaucja: @Model.Caution zł / dzień</small></p>
+                        <p class="card-text">Cena całkowita: @((Model.Price*(int)Session["Days"]).ToString("c"))</p>
+                        @using (Html.BeginForm("FreeCars", "Home", FormMethod.Post, new { id = "back" }))
+                        {
+                            @Html.Hidden("LoanDate", ((RentTimeModelView)ViewBag.rentTime).LoanDate)
+                            @Html.Hidden("ReturnDate", ((RentTimeModelView)ViewBag.rentTime).ReturnDate)
+                        }
+                        <p class="btn-group">
+                            <button class="btn btn-danger" type="submit" form="back">Wróć</button>
+                            <button onclick="location.href='@Url.Action("ConfirmRezervation", "Home", new { carModel = Model.Car.Model, carBrand = Model.Car.Brand})'" class="btn btn-success" type="submit" form="rent">Wynajmij</button>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+                    @*<div class="container d-flex justify-content-center mt-5 col-8 text-center">
+                        <div class="card col-4">
+                            <div class="card-header">@Model.Car.Brand @Model.Car.Model</div>
+                            <div class="card-footer">@Model.Price zł / dzień</div>
+                        </div>
+                        <div class="card col-4">
+                            <div class="card-body">@Model.Description</div>
+                            <div class="card-footer">Cena całkowita: @((Model.Price*(int)Session["Days"]).ToString("c"))</div>
+                        </div>
+
+
+                        @using (Html.BeginForm("ConfirmRezervation", "Home", FormMethod.Post, new { id = "rent" }))
+            {
+                @Html.HiddenFor(x => x.Id)
+                @Html.HiddenFor(x => x.Price)
+                @Html.HiddenFor(x => x.Caution)
+                @Html.HiddenFor(x => x.Description)
+                @Html.HiddenFor(x => x.Car.Id)
+                @Html.HiddenFor(x => x.Car.LicencePlate)
+                @Html.HiddenFor(x => x.Car.Model)
+                @Html.HiddenFor(x => x.Car.Type)
+                @Html.HiddenFor(x => x.Car.Capacity)
+                @Html.HiddenFor(x => x.Car.Brand)
+                @Html.Hidden("returnUrl", Request.Url.PathAndQuery)
+            }
+
+                        <div class="btn-group">
+                            <button class="btn btn-danger" type="submit" form="back">Wróć</button>
+                            <button onclick="location.href='@Url.Action("ConfirmRezervation", "Home", new { carModel = Model.Car.Model, carBrand = Model.Car.Brand})'" class="btn btn-success" type="submit" form="rent">Wynajmij</button>
+                        </div>
+                    </div>*@
+
+

@@ -1,0 +1,33 @@
+﻿@using CarRental.Domain.Models
+@using CarRental.Domain.Extentions
+@model LoanDtoModel
+
+@{
+    ViewBag.Title = "RentedCars";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container col-8 mt-4">
+    <div class="mt-3 d-flex justify-content-center btn-group">
+        <button class = "@((Boolean)ViewBag.Past ?  "btn btn-secondary" : "btn btn-outline-secondary" )" 
+                onclick="location.href='@Url.Action("RentedCars", new { past = true, page = 1 })'">Zakończone wynajmy</button>
+        <button class = "@(!(Boolean)ViewBag.Past ?  "btn btn-secondary" : "btn btn-outline-secondary" )" 
+                onclick="location.href='@Url.Action("RentedCars", new { past = false, page = 1 })'">Wynajmy aktualne i przyszłe</button>
+    </div>
+    <div class="text-center mt-3 mb-5">
+        <h3>Moje rezerwacje:</h3>
+    </div>
+    <hr />
+    <div class="container justify-content-center">
+        @foreach (var loan in Model.Loans)
+        {
+            <div class="mt-2 mb-2">
+                @Html.Partial("RentDetails", loan)
+            </div>
+            <hr />
+        }
+    </div>
+    <div class="d-flex mt-2 mb-5 justify-content-center">
+        @Html.PageLinks(Model.Paging, x => Url.Action("RentedCars", new { page = x, past = ViewBag.Past}))
+    </div>
+</div>
+
